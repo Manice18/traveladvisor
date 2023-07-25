@@ -1,3 +1,46 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer utilities {
+        .scrollbar::-webkit-scrollbar {
+          width: 7px;
+        }
+      
+        .scrollbar::-webkit-scrollbar-track {
+          border-radius: 10px;
+          background: #d6d6d7;
+        }
+      
+        .scrollbar::-webkit-scrollbar-thumb {
+          background: rgba(255,255,255,0.5);
+          border-radius: 10px;
+    box-shadow:  0 0 1px rgba(0, 0, 0, 0.5);
+        }
+      
+        .scrollbar::-webkit-scrollbar-thumb:hover {
+          background: #c0a0b9;
+        }
+      }
+
+@font-face {
+        font-family: 'trip';
+        src: url('/font/TripSans-VF.woff2');
+}
+
+html::-webkit-scrollbar {
+        width: 10px;
+}
+html::-webkit-scrollbar-track { 
+        background : #d6d6d7;
+        border-radius: 10px;
+}
+html::-webkit-scrollbar-thumb { 
+        background : rgba(255,255,255,0.5);
+        border-radius: 10px;
+        box-shadow:  0 0 6px rgba(0, 0, 0, 0.5);
+}
+
+html {
+        scroll-behavior: smooth;
+}
