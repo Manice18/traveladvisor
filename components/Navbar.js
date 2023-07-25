@@ -61,7 +61,7 @@ export default function Navbar({ children }) {
                         ref={searchTextRef}
                     />
                     <button
-                        className='h-full w-11 rounded-r-full hover:bg-slate-200 text-sm font-medium hover:border-2 hover:border-black'
+                        className='h-full w-11 rounded-r-full bg-slate-200 text-sm font-medium hover:border-2 hover:border-black'
                         onClick={async () => {
                             const mytext = search()
                             const params = {
