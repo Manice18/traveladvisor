@@ -12,8 +12,8 @@ const attractionDetails = async (lati, longi) => {
             lang: 'en_US'
         },
         headers: {
-            'X-RapidAPI-Key': '56ff7dbe85mshf4e10be4a6bbb3bp19ca00jsn9f92fcc09ea3',
-            'X-RapidAPI-Host': 'travel-advisor.p.rapidapi.com'
+            'X-RapidAPI-Key': '',
+            'X-RapidAPI-Host': ''
         }
     };
     try {
