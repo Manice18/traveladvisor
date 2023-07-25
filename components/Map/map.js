@@ -4,10 +4,10 @@ import 'leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility
 import L from "leaflet"
 
 import { MapContainer, Marker, Popup, TileLayer, ZoomControl, useMap } from 'react-leaflet'
-import { useBookStore } from '@/utils/dataStore'
+import { useLocationStore } from '@/utils/dataStore'
 
 export default function Map() {
-    const attractionCoordinates = useBookStore(state => state.attractionCoordinates)
+    const attractionCoordinates = useLocationStore(state => state.attractionCoordinates)
     var global = useRef()
     function LocationMarker() {
         const [position, setPosition] = useState(null);

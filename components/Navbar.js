@@ -7,7 +7,7 @@ import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
 import Select from 'react-select'
 import Filter from './Filter'
-import { useBookStore } from '@/utils/dataStore'
+import { useLocationStore } from '@/utils/dataStore'
 import axios from 'axios'
 
 const NOMINATIM_BASE_URL = "https://nominatim.openstreetmap.org/search?";
@@ -30,10 +30,10 @@ export default function Navbar({ children }) {
         setDate(startDate);
         console.log(date)
     };
-    const location = useBookStore(state => state.location)
-    const updateLocation = useBookStore(state => state.updateLocation)
-    const attractions = useBookStore(state => state.attractions)
-    const attractionCoordinates = useBookStore(state => state.attractionCoordinates)
+    const location = useLocationStore(state => state.location)
+    const updateLocation = useLocationStore(state => state.updateLocation)
+    const attractions = useLocationStore(state => state.attractions)
+    const attractionCoordinates = useLocationStore(state => state.attractionCoordinates)
 
     useEffect(() => {
         setoptions(attractions)
