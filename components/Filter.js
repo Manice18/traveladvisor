@@ -6,13 +6,16 @@ const Filter = () => {
     const handleHide = () => {
         setHide((prev) => !prev)
     }
-    const handleChange = event => {
+    const handleChangeResturants = event => {
+        if (event.target.checked) console.log(event.target.value)
+
+    };
+    const handleChangeHotels = event => {
         if (event.target.checked) {
-            console.log('✅ Checkbox is checked');
-        } else {
-            console.log('⛔️ Checkbox is NOT checked');
+            console.log(event.target.value)
         }
     };
+
     return (
         <div className="w-[5rem]">
 
@@ -23,15 +26,15 @@ const Filter = () => {
             <div className={`p-2 border-2 border-gray-400 w-[10rem] bg-white rounded-lg mt-2 ${hide ? "hidden" : ""}`} id="filter-section-mobile-1">
                 <div className="space-y-6 ">
                     <div className="flex items-center">
-                        <input id="filter-mobile-category-0" name="category[]" value="new-arrivals" type="checkbox" className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500" onChange={handleChange} />
+                        <input id="filter-mobile-category-0" name="category[]" value="Resturants" type="checkbox" className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500" onChange={handleChangeResturants} />
                         <label htmlFor="filter-mobile-category-0" className="ml-3 min-w-0 flex-1 text-gray-500">Resturants</label>
                     </div>
                     <div className="flex items-center">
-                        <input id="filter-mobile-category-1" name="category[]" value="sale" type="checkbox" className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500" />
+                        <input id="filter-mobile-category-1" name="category[]" value="Hotels" type="checkbox" className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500" onChange={handleChangeHotels} />
                         <label htmlFor="filter-mobile-category-1" className="ml-3 min-w-0 flex-1 text-gray-500">Hotels</label>
                     </div>
                     <div className="flex items-center">
-                        <input id="filter-mobile-category-1" name="category[]" value="sale" type="checkbox" className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500" />
+                        <input id="filter-mobile-category-1" name="category[]" value="Flights" type="checkbox" className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500" />
                         <label htmlFor="filter-mobile-category-1" className="ml-3 min-w-0 flex-1 text-gray-500">Flights</label>
                     </div>
 

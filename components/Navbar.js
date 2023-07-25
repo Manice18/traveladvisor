@@ -1,7 +1,8 @@
 "use client"
-import React, { useState, Fragment, useRef } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { RiCalendarEventFill } from "react-icons/ri"
 import { IoMdSearch } from "react-icons/io"
+import { MdLocationOn } from "react-icons/md"
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
 import Select from 'react-select'
@@ -16,7 +17,10 @@ const params = {
     addressdetails: "addressdetails",
 };
 
+
 export default function Navbar({ children }) {
+    const [searchData, setSearchData] = useState(null)
+    const [options, setoptions] = useState(null)
     const searchTextRef = useRef(null)
     const search = () => {
         return searchTextRef.current.value
@@ -24,27 +28,31 @@ export default function Navbar({ children }) {
     const [date, setDate] = useState()
     const handleChange = (startDate) => {
         setDate(startDate);
+        console.log(date)
     };
+    const location = useBookStore(state => state.location)
+    const updateLocation = useBookStore(state => state.updateLocation)
+    const attractions = useBookStore(state => state.attractions)
+    const attractionCoordinates = useBookStore(state => state.attractionCoordinates)
 
-
-    const options = [
-        { value: "blues", label: "Blues" },
-        { value: "rock", label: "Rock" },
-        { value: "jazz", label: "Jazz" },
-        { value: "orchestra", label: "Orchestra" },
-    ];
+    useEffect(() => {
+        setoptions(attractions)
+        console.log(attractions.length)
+    }, [options])
     return (
         <div>
             <div className='fixed flex top-0 w-full bg-white h-20 md:justify-between py-4 px-3 border-b-2 border-gray-300'>
                 <div type="button" className='rounded-full border-[3px] border-gray-300 w-[9rem] flex items-center justify-center space-x-1 hover:bg-slate-200 cursor-pointer hover:border-gray-800'>
                     <RiCalendarEventFill />
                     <div>
-                        <DatePicker selected={date} onChange={(startdate) => handleChange(startdate)}
+                        <DatePicker selected={date} onChange={(startdate) => {
+                            handleChange(startdate)
+                        }}
                             placeholderText='Enter Date' className='w-[5.5rem] px-0 m-0 placeholder:text-black placeholder:text-base placeholder:font-medium font-medium bg-inherit focus-within:outline-none'
                         />
                     </div>
                 </div>
-                <div className='flex w-[50%] items-center space-x-3 rounded-full shadow-lg shadow-gray-400 pl-3 focus-within:w-[60%] justify-between'>
+                <div className='flex w-[50%] items-center space-x-3 rounded-full shadow-lg shadow-gray-400 pl-3 focus-within:w-[60%] justify-between relative'>
                     <IoMdSearch size={20} />
                     <input
                         type='text'
@@ -69,11 +77,29 @@ export default function Navbar({ children }) {
                             };
                             const res = await axios.get(`${NOMINATIM_BASE_URL}${queryString}`, requestOptions)
                             console.log(res.data)
+                            setSearchData(res.data)
                         }}
                     >
                         Go
                     </button>
+                    {
+                        searchData && <ul className='flex flex-col absolute top-0 mt-11 w-[83%] bg-white space-y-2 px-2'>
+                            {
+                                searchData.map((data) => (
+                                    <li key={data.place_id} className='flex hover:bg-gray-200 cursor-pointer space-x-2 '
+                                        onClick={() => {
+                                            updateLocation(data.display_name)
+                                            setSearchData(null)
+                                        }}>
+                                        <MdLocationOn size={20} />
+                                        <p className='text-sm font-medium w-[80%]'>{data.display_name}</p></li>
+                                ))
+                            }
+                        </ul>
+                    }
+
                 </div>
+
                 <div className='flex space-x-3 text-base font-medium '>
                     <Filter />
                     <Select placeholder="Attractions" className='md:h-[45px] md:w-[9rem] 6rem '
@@ -92,8 +118,6 @@ export default function Navbar({ children }) {
                                 color: "#000"
                             }),
                         }} />
-
-                    {/* </div> */}
                 </div>
             </div>
             <main className='w-full'>{children}</main>

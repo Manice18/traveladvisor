@@ -1,15 +1,13 @@
-import React, { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import 'leaflet/dist/leaflet.css'
-// import 'leaflet-defaulticon-compatibility'
 import 'leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.css'
 import L from "leaflet"
 
 import { MapContainer, Marker, Popup, TileLayer, ZoomControl, useMap } from 'react-leaflet'
-import { data1 } from '@/constants'
-import Description from './Description'
+import { useBookStore } from '@/utils/dataStore'
 
 export default function Map() {
-    // const [global, setGlobal] = useState(null)
+    const attractionCoordinates = useBookStore(state => state.attractionCoordinates)
     var global = useRef()
     function LocationMarker() {
         const [position, setPosition] = useState(null);
@@ -20,7 +18,6 @@ export default function Map() {
         useEffect(() => {
             map.locate().on("locationfound", function (e) {
                 setPosition(e.latlng);
-                // setGlobal(e.latlng)
                 console.log(e.latlng)
                 global = e.latlng
                 map.flyTo(e.latlng, map.getZoom());
@@ -58,32 +55,23 @@ export default function Map() {
     })
     return (
         <div className='col-span-2 md:col-span-1 h-[74%] z-[1] relative'>
-            <MapContainer center={[12.235588, 109.19553]} zoom={18} scrollWheelZoom={true} className='w-full min-h-screen' zoomControl={false}>
+            {attractionCoordinates.length === 0 ? <></> : (<MapContainer center={[13.085833, 80.28397]} zoom={16} scrollWheelZoom={true} className='w-full min-h-screen' zoomControl={false}>
                 <TileLayer
                     url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                 />
                 {/* <LocationMarker /> */}
                 <ZoomControl position='topright' />
-                <Marker position={[12.235588, 109.19553]} icon={hotelIcon}>
-                    <Popup>
-                        A pretty CSS3 popup. <br /> Easily customizable.
-                    </Popup>
-                </Marker>
                 {
-                    data1.map((value) => (
-                        <Marker position={[value.coordinates[0], value.coordinates[1]]} icon={locationIcon} key={value.id}>
+                    attractionCoordinates.map((value, index) => (
+                        <Marker position={[value.latitude, value.longitude]} icon={locationIcon} key={index}>
                             <Popup>
                                 A pretty CSS3 popup. <br /> Easily customizable.
                             </Popup>
                         </Marker>
                     ))
                 }
-                {/* <Description
-                    title={"My button"}
-                    markerPosition={[20.27, -157]}
-                    description="This is a custom description!" /> */}
-            </MapContainer>
+
+            </MapContainer>)}
         </div>
     )
 }
-
