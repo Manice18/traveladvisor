@@ -2,20 +2,26 @@ import { useEffect, useState } from 'react'
 import RangeSlider from './RangeSlider'
 import { useLocationStore } from '@/utils/dataStore'
 import { attractionDetails, locationDetails } from '@/network/location'
+import { backUpAttractions } from '@/constants'
 
 const PlaceDetails = () => {
     const [range, setRange] = useState(0)
     const [placeDetails, setPlaceDetails] = useState([{}])
 
     const location = useLocationStore(state => state.location)
+
+    const updateMainLocationCoordinates = useLocationStore(state => state.updateMainLocationCoordinates)
+
     const updateAttractions = useLocationStore(state => state.updateAttractions)
     const updateAttractionCoordinates = useLocationStore(state => state.updateAttractionCoordinates)
 
     useEffect(() => {
         const coordinates = async () => {
             locationDetails(location).then((res) => {
+                updateMainLocationCoordinates(res.data.Typeahead_autocomplete.results[0].detailsV2.geocode.latitude, res.data.Typeahead_autocomplete.results[0].detailsV2.geocode.longitude)
+
                 attractionDetails(res.data.Typeahead_autocomplete.results[0].detailsV2.geocode.latitude, res.data.Typeahead_autocomplete.results[0].detailsV2.geocode.longitude).then((res2) => {
-                    console.log(res2.data)
+                    // console.log(res2.data)
                     setPlaceDetails(res2.data)
 
                     res2.data.filter((filteredData) => filteredData.hasOwnProperty('photo')).map((data) => updateAttractions(data.name, data.name))

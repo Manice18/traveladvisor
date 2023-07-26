@@ -8,12 +8,19 @@ import { useLocationStore } from '@/utils/dataStore'
 
 export default function Map() {
     const attractionCoordinates = useLocationStore(state => state.attractionCoordinates)
+
+    const mainLocationCoordinates = useLocationStore(state => state.mainLocationCoordinates)
+
+    const hotelsCoordinates = useLocationStore(state => state.hotelsCoordinates)
+
     var global = useRef()
     function LocationMarker() {
         const [position, setPosition] = useState(null);
         const [bbox, setBbox] = useState([]);
 
         const map = useMap();
+
+
 
         useEffect(() => {
             map.locate().on("locationfound", function (e) {
@@ -39,6 +46,7 @@ export default function Map() {
                     <b>Northeast lat</b>: {bbox[3]}
                 </Popup>
             </Marker>
+
         );
     }
     var hotelIcon = L.icon({
@@ -53,9 +61,11 @@ export default function Map() {
         iconAnchor: [22, 94],
         popupAnchor: [-3, -76],
     })
+
     return (
         <div className='col-span-2 md:col-span-1 h-[74%] z-[1] relative'>
-            {attractionCoordinates.length === 0 ? <></> : (<MapContainer center={[13.085833, 80.28397]} zoom={16} scrollWheelZoom={true} className='w-full min-h-screen' zoomControl={false}>
+
+            {attractionCoordinates.length === 0 ? <></> : (<MapContainer center={[mainLocationCoordinates[0].latitude, mainLocationCoordinates[0].longitude]} zoom={16} scrollWheelZoom={true} className='w-full min-h-screen' zoomControl={false}>
                 <TileLayer
                     url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                 />
@@ -70,6 +80,17 @@ export default function Map() {
                         </Marker>
                     ))
                 }
+                {/* hotelsCoordinates.length === 0 ? <></> : */}
+
+                {/* hotelsCoordinates.length === 0 ? <></> : hotelsCoordinates.map((value, index) => (
+                        <Marker position={[value.latitude, value.longitude]} icon={hotelIcon} key={index}>
+                            <Popup>
+                                A pretty CSS3 popup. <br /> Easily customizable.
+                            </Popup>
+                        </Marker>
+                    )) */}
+
+
 
             </MapContainer>)}
         </div>

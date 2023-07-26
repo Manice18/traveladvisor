@@ -9,6 +9,7 @@ import Select from 'react-select'
 import Filter from './Filter'
 import { useLocationStore } from '@/utils/dataStore'
 import axios from 'axios'
+import { hotelDetails } from '@/network/location'
 
 const NOMINATIM_BASE_URL = "https://nominatim.openstreetmap.org/search?";
 const params = {
@@ -28,17 +29,33 @@ export default function Navbar({ children }) {
     const [date, setDate] = useState()
     const handleChange = (startDate) => {
         setDate(startDate);
-        console.log(date)
+        updateHotelDate(new Date(startDate).toLocaleDateString().split("/").reverse().join("-"))
     };
     const location = useLocationStore(state => state.location)
     const updateLocation = useLocationStore(state => state.updateLocation)
+
+    const mainLocationCoordinates = useLocationStore(state => state.mainLocationCoordinates)
+
     const attractions = useLocationStore(state => state.attractions)
     const attractionCoordinates = useLocationStore(state => state.attractionCoordinates)
+
+    const updateHotelCoordinates = useLocationStore(state => state.updateHotelCoordinates)
+    const hotelsCoordinates = useLocationStore(state => state.hotelsCoordinates)
+
+    const updateHotelDate = useLocationStore(state => state.updateHotelDate)
+    const hotelDate = useLocationStore(state => state.hotelDate)
 
     useEffect(() => {
         setoptions(attractions)
         console.log(attractions.length)
-    }, [options])
+    }, [attractions])
+
+    useEffect(() => {
+        date !== undefined ? hotelDetails(mainLocationCoordinates[0].latitude, mainLocationCoordinates[0].longitude, hotelDate).then((res) => res.data.map((data) => {
+            updateHotelCoordinates(data.latitude, data.longitude)
+        })) : ""
+    }, [date])
+
     return (
         <div>
             <div className='fixed flex top-0 w-full bg-white h-20 md:justify-between py-4 px-3 border-b-2 border-gray-300'>
@@ -76,7 +93,7 @@ export default function Navbar({ children }) {
                                 redirect: 'follow'
                             };
                             const res = await axios.get(`${NOMINATIM_BASE_URL}${queryString}`, requestOptions)
-                            console.log(res.data)
+                            // console.log(res.data)
                             setSearchData(res.data)
                         }}
                     >
